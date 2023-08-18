@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmqpPersistents", "AmqpPersistents\AmqpPersistents.csproj", "{FC5A10FE-627F-43CB-AB9F-082DC1604BF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib.Amqp", "Lib.Amqp\Lib.Amqp.csproj", "{2E9D903A-3910-45A4-81A7-B22F7A122F4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FC5A10FE-627F-43CB-AB9F-082DC1604BF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC5A10FE-627F-43CB-AB9F-082DC1604BF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC5A10FE-627F-43CB-AB9F-082DC1604BF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E9D903A-3910-45A4-81A7-B22F7A122F4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E9D903A-3910-45A4-81A7-B22F7A122F4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E9D903A-3910-45A4-81A7-B22F7A122F4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E9D903A-3910-45A4-81A7-B22F7A122F4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
