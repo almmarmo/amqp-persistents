@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="AMQPNetLite.Core" Version="2.4.6" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
   </ItemGroup>
 
 </Project>

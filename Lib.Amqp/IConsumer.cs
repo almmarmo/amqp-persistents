@@ -8,6 +8,6 @@ namespace Lib.Amqp
 {
     public interface IConsumer
     {
-        Task ReceiveAsync(Func<IReceiverLink, Message, Task> processMessage);
+        Task ReceiveAsync(Func<ReceiverLinkWrapper, Task> processMessage);
     }
 }
