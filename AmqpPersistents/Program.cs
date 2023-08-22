@@ -34,7 +34,7 @@ IPersistentConsumer consumer = provider.GetService<IPersistentConsumer>()!;
 await consumer.StartReceive(async w => {
     string messageBody = w.GetMessageBody().ToString()!;
 
-    Console.Write($"[{DateTime.Now}]-{messageBody}");
+    Console.WriteLine($"[{DateTime.Now}]-{messageBody}");
 
     w.AcceptMessage();
     await Task.CompletedTask;

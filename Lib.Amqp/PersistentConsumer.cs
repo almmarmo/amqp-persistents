@@ -9,6 +9,9 @@ namespace Lib.Amqp
 {
     public class PersistentConsumer : IPersistentConsumer, IDisposable
     {
+        private const int MSLOOPING_DELAY = 5;
+        private const int CREDIT_PUMP = 1;
+
         private AmqpLite.ConnectionFactory? connectionFactory;
         private AmqpLite.Connection? connection;
         private AmqpLite.Session? session;
@@ -19,9 +22,11 @@ namespace Lib.Amqp
         private readonly string host;
         private readonly int port;
         private readonly string address;
+        private readonly int? msLoopingDelay;
+        private readonly int? creditPump;
         private readonly ILogger logger;
 
-        public PersistentConsumer(string schema, string user, string password, string host, int port, string address, ILogger logger)
+        public PersistentConsumer(string schema, string user, string password, string host, int port, string address, int? msLoopingDelay, int? creditPump, ILogger logger)
         {
             this.schema = schema;
             this.user = user;
@@ -29,9 +34,9 @@ namespace Lib.Amqp
             this.host = host;
             this.port = port;
             this.address = address;
+            this.msLoopingDelay = msLoopingDelay;
+            this.creditPump = creditPump;
             this.logger = logger;
-
-            //logger = NLog.LogManager.LogFactory.GetLogger("PersistentConsumer");
         }
 
         private async Task Setup()
@@ -46,17 +51,15 @@ namespace Lib.Amqp
             session = new AmqpLite.Session(connection);
             session.Closed += Session_Closed;
 
-            logger.LogInformation("Connection setup");
+            logger?.LogInformation("Connection setup");
         }
 
         private void Session_Closed(AmqpLite.IAmqpObject sender, AmqpLite.Framing.Error error)
         {
-            logger.LogWarning($"session closed! d:{error?.Description}");
-            //receiver.Detach(error);
-            //persistentConsumer = false;
+            logger?.LogWarning($"session closed! d:{error?.Description}");
         }
 
-        public async Task StartReceive(Func<ReceiverLinkWrapper, Task> processMessage)
+        public async Task StartReceive(Func<IReceiverLinkWrapper, Task> processMessage)
         {
             if (session == null || session.IsClosed)
                 await Setup();
@@ -67,32 +70,32 @@ namespace Lib.Amqp
             {
                 if (session != null && session.IsClosed)
                 {
-                    logger.LogWarning("Reconnecting...");
+                    logger?.LogWarning("Reconnecting...");
+                    await Task.Delay(100);
                     await Setup();
                     
                     receiver ??= new AmqpLite.ReceiverLink(session, $"amq-console-consumer={Guid.NewGuid()}", address);
 
-                    logger.LogWarning("Connections objects restarted.");
+                    logger?.LogWarning("Connections objects restarted.");
                 }
 
-                receiver.Start(1, async (link, message) =>
+                receiver.Start(creditPump ?? CREDIT_PUMP, async (link, message) =>
                 {
                     try
                     {
                         await processMessage.Invoke(new ReceiverLinkWrapper(link, message));
-
                     }
                     catch (Exception e)
                     {
-                        logger.LogError(e, "Error on receiving message.");
+                        logger?.LogError(e, "Error on receiving message.");
                     }
                 });
 
-                await Task.Delay(5);
+                await Task.Delay(msLoopingDelay ?? MSLOOPING_DELAY);
             }
         }
 
-        public async Task ReceiveAsync(Func<ReceiverLinkWrapper, Task> processMessage)
+        public async Task ReceiveAsync(Func<IReceiverLinkWrapper, Task> processMessage)
         {
             if (session == null || session.IsClosed)
                 await Setup();
@@ -108,9 +111,8 @@ namespace Lib.Amqp
                 }
                 catch (Exception e)
                 {
-                    logger.LogError(e, "Error on receiving message.");
+                    logger?.LogError(e, "Error on receiving message.");
                 }
-                //await receiver.DetachAsync();
             });
         }
 
@@ -124,7 +126,7 @@ namespace Lib.Amqp
             session = null;
             connection = null;
 
-            logger.LogInformation("Persistent consumer disposed.");
+            logger?.LogInformation("Persistent consumer disposed.");
         }
     }
 }

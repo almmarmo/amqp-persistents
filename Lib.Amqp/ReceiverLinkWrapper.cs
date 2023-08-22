@@ -2,7 +2,7 @@
 
 namespace Lib.Amqp
 {
-    public class ReceiverLinkWrapper
+    public class ReceiverLinkWrapper : IReceiverLinkWrapper
     {
         private readonly IReceiverLink receiverLink;
         private readonly Message message;

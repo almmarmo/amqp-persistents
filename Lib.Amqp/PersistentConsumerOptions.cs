@@ -8,5 +8,7 @@
         public string Host { get; set; }
         public int Port { get; set; }
         public string Address { get; set; }
+        public int? MsLoopingDelay { get; set; }
+        public int? CreditPump { get; set; }
     }
 }

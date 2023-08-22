@@ -14,6 +14,6 @@ namespace Lib.Amqp
             this.loggerFactory = loggerFactory;
         }
 
-        public PersistentConsumer Create() => new PersistentConsumer(options.Schema, options.User, options.Password, options.Host, options.Port, options.Address, loggerFactory?.CreateLogger<PersistentConsumer>());
+        public PersistentConsumer Create() => new PersistentConsumer(options.Schema, options.User, options.Password, options.Host, options.Port, options.Address, options.MsLoopingDelay, options.CreditPump, loggerFactory?.CreateLogger<PersistentConsumer>()!);
     }
 }

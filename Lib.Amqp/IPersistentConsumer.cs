@@ -8,6 +8,6 @@ namespace Lib.Amqp
 {
     public interface IPersistentConsumer
     {
-        Task StartReceive(Func<ReceiverLinkWrapper, Task> processMessage);
+        Task StartReceive(Func<IReceiverLinkWrapper, Task> processMessage);
     }
 }
