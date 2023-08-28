@@ -13,9 +13,6 @@ var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
 
-services.AddOptions();
-//var options = new PersistentConsumerOptions();
-//config.GetSection("PersistentConsumer").Bind(options);
 services.AddSingleton<IConfiguration>(config);
 services.AddLogging(s => s.AddConsole());
 services.AddOptions<PersistentConsumerOptions>().BindConfiguration("PersistentConsumer");
